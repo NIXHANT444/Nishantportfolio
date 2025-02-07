@@ -1,15 +1,6 @@
 #!/bin/bash
 echo "🚀 Starting Render deployment setup..."
 
-# Server setup
-cd server
-echo "🔧 Installing server dependencies..."
-npm install
-echo "✅ Server dependencies installed."
-echo "🔄 Starting the server..."
-node server.js &
-echo "✅ Server started."
-
 # Client setup
 cd ../client
 npm install tailwindcss postcss autoprefixer
@@ -20,3 +11,13 @@ echo "📦 Building client app..."
 npm run build
 echo "🔄 Starting the client app..."
 npm start
+
+# Server setup
+cd server
+echo "🔧 Installing server dependencies..."
+npm install
+echo "✅ Server dependencies installed."
+echo "🔄 Starting the server..."
+node server.js &
+echo "✅ Server started."
+

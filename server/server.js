@@ -24,7 +24,12 @@ connect();
 app.use(cors());
 // Middleware to parse JSON
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../client/src/app')));
 
+// Route to serve layout.js as the default page for /
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/src/app/layout.js'));
+});
 // Get all projects
 app.get('/data', async (req, res) => {
   try {

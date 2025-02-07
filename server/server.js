@@ -5,7 +5,12 @@ const Mockup = require('./mockupmodule');
 const Review = require('./reviews'); // Import the Project model
 const cors = require('cors');
 const app = express();
-const path = require('path');
+const express = require("express");
+const next = require("next");
+const path = require("path");
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
 const PORT = process.env.PORT || 5000;
 // Connect to MongoDB (replace with your connection string if using MongoDB Atlas)
@@ -26,12 +31,22 @@ connect();
 app.use(cors());
 // Middleware to parse JSON
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../client/src/app')));
 
-// Route to serve layout.js as the default page for /
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/src/app/layout.js'));
-});
+app.prepare().then(() => {
+  const server = express();
+
+  // Serve static files from the client app directory
+  server.use(express.static(path.join(__dirname, "../client/src/app")));
+
+  // Serve the layout.js or any other Next.js pages
+  server.get("/", (req, res) => {
+    return app.render(req, res, "/");
+  });
+
+  // For other pages or assets, use the default Next.js handler
+  server.get("*", (req, res) => {
+    return handle(req, res);
+  });
 // Get all projects
 app.get('/data', async (req, res) => {
   try {

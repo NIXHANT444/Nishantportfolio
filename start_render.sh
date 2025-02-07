@@ -2,7 +2,7 @@
 echo "🚀 Starting Render deployment setup..."
 
 # Client setup
-cd ../client
+cd client
 npm install tailwindcss postcss autoprefixer
 echo "🔧 Installing client dependencies..."
 npm install
@@ -11,6 +11,7 @@ echo "📦 Building client app..."
 npm run build
 echo "🔄 Starting the client app..."
 npm start
+cd ..
 
 # Server setup
 cd server

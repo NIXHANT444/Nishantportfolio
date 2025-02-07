@@ -2,111 +2,98 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Project = require('./projectModel');
 const Mockup = require('./mockupmodule');
-const Review = require('./reviews'); // Import the Project model
+const Review = require('./reviews');
+const next = require('next');
+const path = require('path');
 const cors = require('cors');
-const app = express();
-const express = require("express");
-const next = require("next");
-const path = require("path");
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
+
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev, dir: path.join(__dirname, '../client') }); // Load Next.js from client directory
+const handle = nextApp.getRequestHandler();
 
 const PORT = process.env.PORT || 5000;
-// Connect to MongoDB (replace with your connection string if using MongoDB Atlas)
-const connect = async () => {
-  try{
-        mongoose.connect('mongodb+srv://itsnishant470:rXjIlUsnqg8kjFbm@cluster0.amgic.mongodb.net/', {
-          
-        }).then(() => {
-          console.log('MongoDB connected');
-        }).catch(err => console.log(err));}
-  catch{
-    console.log("error")
-  }
-}
+const app = express();
 
-connect();
-
+// Middleware
 app.use(cors());
-// Middleware to parse JSON
 app.use(express.json());
 
-app.prepare().then(() => {
-  const server = express();
-
-  // Serve static files from the client app directory
-  server.use(express.static(path.join(__dirname, "../client/src/app")));
-
-  // Serve the layout.js or any other Next.js pages
-  server.get("/", (req, res) => {
-    return app.render(req, res, "/");
-  });
-
-  // For other pages or assets, use the default Next.js handler
-  server.get("*", (req, res) => {
-    return handle(req, res);
-  });
-// Get all projects
-app.get('/data', async (req, res) => {
+// MongoDB connection
+const connectDB = async () => {
   try {
-    const projects = await Project.find();
-    return res.json({projects : projects});
+    await mongoose.connect(
+      process.env.MONGO_URI || 'mongodb+srv://itsnishant470:rXjIlUsnqg8kjFbm@cluster0.amgic.mongodb.net/'
+    );
+    console.log('MongoDB connected');
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error('MongoDB connection error:', err);
   }
-});
+};
 
-app.get('/mockup', async (req, res) => {
-  try{
-    const mockups = await Mockup.find()
-    return res.json({mockups : mockups})
-  }catch(err){
-    res.status(501).send('Server error');
-  }
-});
+connectDB();
 
-app.get('/reviews', async (req, res) => {
-  try {
+nextApp.prepare().then(() => {
+  // API Routes
+  app.get('/data', async (req, res) => {
+    try {
+      const projects = await Project.find();
+      return res.json({ projects });
+    } catch (err) {
+      res.status(500).send('Server error');
+    }
+  });
+
+  app.get('/mockup', async (req, res) => {
+    try {
+      const mockups = await Mockup.find();
+      return res.json({ mockups });
+    } catch (err) {
+      res.status(500).send('Server error');
+    }
+  });
+
+  app.get('/reviews', async (req, res) => {
+    try {
       const reviews = await Review.find();
       return res.json({ reviews });
-  } catch (err) {
-      res.status(501).json({ error: 'Server error' });
-  }
-});
+    } catch (err) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
 
-app.post('/reviews', async (req, res) => {
-  const { name, description } = req.body;
-  try {
+  app.post('/reviews', async (req, res) => {
+    const { name, description } = req.body;
+    try {
       if (!name || !description) {
-          return res.status(400).json({ error: 'Name and description are required' });
+        return res.status(400).json({ error: 'Name and description are required' });
       }
       const newReview = new Review({ name, description });
       await newReview.save();
       res.status(201).json(newReview);
-  } catch (err) {
-      console.error('Error saving review:', err); // Log the exact error to the console
+    } catch (err) {
+      console.error('Error saving review:', err);
       res.status(500).json({ error: 'Server error' });
-  }
-});
+    }
+  });
 
+  app.post('/data', async (req, res) => {
+    const { title, description, imageUrl } = req.body;
+    try {
+      const newProject = new Project({ title, description, imageUrl });
+      await newProject.save();
+      res.status(201).json(newProject);
+    } catch (err) {
+      res.status(500).send('Server error');
+    }
+  });
 
+  // Serve all Next.js pages and static files
+  app.all('*', (req, res) => {
+    return handle(req, res);
+  });
 
-
-// Add a new project
-app.post('/data', async (req, res) => {
-  const { title, description, imageUrl } = req.body;
-
-  try {
-    const newProject = new Project({ title, description, imageUrl });
-    await newProject.save();
-    res.status(201).json(newProject);
-  } catch (err) {
-    res.status(500).send('Server error');
-  }
-});
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });

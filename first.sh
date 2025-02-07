@@ -17,11 +17,10 @@ cd ..
 # Server setup
 cd server
 echo "🔧 Installing server dependencies..."
+npm ls react react-dom
 npm install next@latest
 npm install
-npm run build
 echo "✅ Server dependencies installed."
 echo "🔄 Starting the server..."
-npm ls react react-dom
 
 echo "✅ Done Now Start SErver"

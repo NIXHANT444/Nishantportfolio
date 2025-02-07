@@ -5,6 +5,8 @@ const Mockup = require('./mockupmodule');
 const Review = require('./reviews'); // Import the Project model
 const cors = require('cors');
 const app = express();
+const path = require('path');
+
 const PORT = process.env.PORT || 5000;
 // Connect to MongoDB (replace with your connection string if using MongoDB Atlas)
 const connect = async () => {

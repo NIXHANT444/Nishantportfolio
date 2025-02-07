@@ -1,3 +1,3 @@
-node server.js
+node server
 echo "✅ Server started."
 

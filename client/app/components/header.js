@@ -21,10 +21,10 @@ function Head() {
 
         <div className='right' style={{ display: 'flex', alignItems: 'center', padding: '20px' }}>
           <div style={{ color: 'white', paddingRight: '20px', gap: '20px' }} className="nav-links">
-            <span style={{ fontSize: '1vw' }}><a href="/" style={{ color: 'white', textDecoration: 'none' }}>Home |</a></span>
-            <span style={{ fontSize: '1vw' }}><a href="#projects" style={{ color: 'white', textDecoration: 'none' }}>Projects |</a></span>
-            <span style={{ fontSize: '1vw' }}><a href="#about" style={{ color: 'white', textDecoration: 'none' }}>About |</a></span>
-            <span style={{ fontSize: '1vw' }}><a href="#skills" style={{ color: 'white', textDecoration: 'none' }}>Skills |</a></span>
+            <span style={{ fontSize: '1vw' }}><a href="/" style={{ color: 'white', textDecoration: 'none',marginRight:'25px' }}>Home |</a></span>
+            <span style={{ fontSize: '1vw' }}><a href="#projects" style={{ color: 'white', textDecoration: 'none',marginRight:'25px' }}>Projects |</a></span>
+            <span style={{ fontSize: '1vw' }}><a href="#about" style={{ color: 'white', textDecoration: 'none',marginRight:'25px' }}>About |</a></span>
+            <span style={{ fontSize: '1vw' }}><a href="#skills" style={{ color: 'white', textDecoration: 'none',marginRight:'25px' }}>Skills |</a></span>
             <span style={{ fontSize: '1vw' }}><a href="#footer" style={{ color: 'white', textDecoration: 'none' }}>Contact |</a></span>
           </div>
           <div className='button-rap'>

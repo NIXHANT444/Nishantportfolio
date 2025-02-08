@@ -9,8 +9,8 @@ export default function Projects() {
         (async () => {
             try {
                 setLoading(true); // Set loading to true when fetching begins
-                const res = await fetch('http://localhost:5000/data');
-                const mres = await fetch('http://localhost:5000/mockup');
+                const res = await fetch('https://nishant-1lot.onrender.com/data');
+                const mres = await fetch('https://nishant-1lot.onrender.com/mockup');
                 const mockups = await mres.json();
                 const data = await res.json();
                 setProjects(data.projects);

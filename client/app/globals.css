@@ -236,7 +236,7 @@ body {
     transition: transform 0.3s, box-shadow 0.3s;
     border-radius: 15px; 
     overflow: hidden; 
-    background: rgba(255, 255, 255, 0.601); /* Light background for project cards */
+    /* background: rgba(255, 255, 255, 0.601); Light background for project cards */
     backdrop-filter: blur(10px); /* Adds a blur effect behind the project cards */
     border: 1px solid rgba(240, 139, 51, 0.2); /* Subtle border with your theme color */
 }
@@ -957,4 +957,6 @@ body {
 .logo-i:hover {
   transform: rotate(360deg) scale(1.2);
 }
+
+
 
